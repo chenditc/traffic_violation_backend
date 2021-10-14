@@ -11,9 +11,9 @@ USER_REQUEST_TABLE = "UserRequestInfo"
 
 def save_report_info(report_info):    
     report_entity = {
-        u'PartitionKey': str(report_info["user_id"]), 
-        u'RowKey': report_info["report_id"],
-        u"report_json": json.dumps(report_info)
+        'PartitionKey': str(report_info["user_id"]), 
+        'RowKey': report_info["report_id"],
+        "report_json": json.dumps(report_info)
     }
     table_client = table_service_client.get_table_client(table_name=TRAFFIC_INFO_TABLE)
     table_client.upsert_entity(entity=report_entity)
@@ -37,13 +37,13 @@ def list_report_info(user):
 
 def save_user_request(user_request_info):
     user = str(user_request_info["user"])
-    entity = {
+    request_entity = {
         'PartitionKey': user, 
         'RowKey': user,
         "request_info": json.dumps(user_request_info)
     }
     table_client = table_service_client.get_table_client(table_name=USER_REQUEST_TABLE)
-    table_client.upsert_entity(entity)
+    table_client.upsert_entity(entity=request_entity)
 
 def get_user_request_info(user):
     table_client = table_service_client.get_table_client(table_name=USER_REQUEST_TABLE)
