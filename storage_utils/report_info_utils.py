@@ -42,12 +42,12 @@ def save_user_request(user_request_info):
     table_service_client.insert_or_replace_entity(USER_REQUEST_TABLE, entity)
 
 def get_user_request_info(user):
-    result_list = table_service_client.query_entities(
+    result_list = list(table_service_client.query_entities(
         USER_REQUEST_TABLE, 
-        filter="PartitionKey eq '" + user + "'")
+        filter="PartitionKey eq '" + user + "'"))
 
     if len(result_list) == 0:
         return
 
-    request_info = result_list[0]["request_info"]
+    request_info = json.loads(result_list[0]["request_info"])
     return request_info
