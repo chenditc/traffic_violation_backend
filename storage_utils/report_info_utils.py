@@ -1,24 +1,27 @@
 import os
 import json
-from azure.cosmosdb.table.tableservice import TableService
+from azure.data.tables import TableServiceClient
 # https://docs.microsoft.com/en-us/azure/cosmos-db/table/how-to-use-python
 
-table_service_client = TableService(connection_string=os.getenv("TABLE_CONNECTION_STRING"))
+connection_string=os.getenv("TABLE_CONNECTION_STRING");
+table_service_client = TableServiceClient.from_connection_string(conn_str=connection_string)
 TRAFFIC_INFO_TABLE = "TrafficReportInfo"
 USER_REQUEST_TABLE = "UserRequestInfo"
 
+
 def save_report_info(report_info):    
-    entity = {
-        'PartitionKey': report_info["user_id"], 
+    report_entity = {
+        'PartitionKey': str(report_info["user_id"]), 
         'RowKey': report_info["report_id"],
         "report_json": json.dumps(report_info)
     }
-    table_service_client.insert_or_replace_entity(TRAFFIC_INFO_TABLE, entity)
+    table_client = table_service_client.get_table_client(table_name=TRAFFIC_INFO_TABLE)
+    table_client.upsert_entity(entity=report_entity)
 
 def list_report_info(user):
-    report_list = table_service_client.query_entities(
-        TRAFFIC_INFO_TABLE, 
-        filter="PartitionKey eq '" + user + "'")
+    table_client = table_service_client.get_table_client(table_name=TRAFFIC_INFO_TABLE)
+    report_list = table_client.query_entities(
+        query_filter="PartitionKey eq '" + user + "'")
 
     result = []
     for report in report_list:
@@ -28,23 +31,24 @@ def list_report_info(user):
         except Exception as e:
             print(e)
             # If failed to parse, just delete it
-            table_service_client.delete_entity(TRAFFIC_INFO_TABLE, report["PartitionKey"], report["RowKey"])
+            # table_client.delete_entity(TRAFFIC_INFO_TABLE, report["PartitionKey"], report["RowKey"])
             pass
     return result
 
 def save_user_request(user_request_info):
-    user = user_request_info["user"]
-    entity = {
+    user = str(user_request_info["user"])
+    request_entity = {
         'PartitionKey': user, 
         'RowKey': user,
         "request_info": json.dumps(user_request_info)
     }
-    table_service_client.insert_or_replace_entity(USER_REQUEST_TABLE, entity)
+    table_client = table_service_client.get_table_client(table_name=USER_REQUEST_TABLE)
+    table_client.upsert_entity(entity=request_entity)
 
 def get_user_request_info(user):
-    result_list = table_service_client.query_entities(
-        USER_REQUEST_TABLE, 
-        filter="PartitionKey eq '" + user + "'")
+    table_client = table_service_client.get_table_client(table_name=USER_REQUEST_TABLE)
+    result_list = table_client.query_entities(
+        query_filter="PartitionKey eq '" + user + "'")
 
     if len(result_list) == 0:
         return
