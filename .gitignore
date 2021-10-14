@@ -128,3 +128,7 @@ obj
 appsettings.json
 local.settings.json
 .python_packages
+.idea/
+plate/imgs/
+python-env/
+video/
