@@ -8,12 +8,14 @@ import numpy as np
 import torch
 import torch.backends.cudnn as cudnn
 
-from data import cfg_mnet
-from layers.functions.prior_box import PriorBox
-from models.retina import Retina
-from utils.box_utils import decode, decode_landm
-from utils.nms.py_cpu_nms import py_cpu_nms
+from .data import cfg_mnet
+from .layers.functions.prior_box import PriorBox
+from .models.retina import Retina
+from .utils.box_utils import decode, decode_landm
+from .utils.nms.py_cpu_nms import py_cpu_nms
 
+import pathlib
+curr_path = pathlib.Path(__file__).parent.resolve()
 
 class PlateDetect:
 
@@ -21,7 +23,7 @@ class PlateDetect:
         torch.set_grad_enabled(False)
         cfg = cfg_mnet
         net = Retina(cfg=cfg, phase='test')
-        net = self.load_model(net, './weights/mnet_plate.pth', True)
+        net = self.load_model(net, str(curr_path) + '/weights/mnet_plate.pth', True)
         net.eval()
         print('Finished loading model!')
 
