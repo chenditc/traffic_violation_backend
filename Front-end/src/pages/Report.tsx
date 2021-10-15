@@ -179,7 +179,7 @@ export default function ReportPage() {
         className={styles["login-button"]}
         loading={submitting}
       >
-        {!reportInfo?.report_success ? "Report it now!" : "Report again!"}
+        {!reportInfo?.report_success ? "提交举报!" : "再举报!"}
       </Button>
     </div>
   );

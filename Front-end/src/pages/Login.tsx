@@ -28,7 +28,7 @@ export default function LoginPage() {
           clearable={true}
           value={phoneNumber}
           onChange={onPhoneNumberChange}
-          placeholder="Input phone number"
+          placeholder="请输入手机号"
           className={styles["phone-input"]}
         />
         <Button
@@ -36,7 +36,7 @@ export default function LoginPage() {
           className={styles["login-button"]}
           size="large"
         >
-          Login
+          登录
         </Button>
       </Space>
     </div>

@@ -41,10 +41,18 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         return func.HttpResponse("Failed to parse report_json")
 
     logging.info("Enriching additional report info")
-    enrich_report_info.enrich_report_info(report_info)
     report_info["violation_type"] = report_info.get("violation_type", "")
     report_info["plate_num"] = report_info.get("plate_num", "")
     report_info["plate_color"] = get_plate_color(report_info["plate_num"])
+
+    if report_info["plate_num"] == "" or len(report_info["plate_num"]) < 7:
+        return func.HttpResponse("Invalid plate number", status_code=400)
+    if report_info["violation_type"] == "" or len(report_info["violation_type"]) < 2:
+        return func.HttpResponse("Invalid violation type", status_code=400)
+    if report_info["violation_type"] in report_info.get("report_success_reason", []):
+        return func.HttpResponse("Already report this type", status_code=400)
+
+    enrich_report_info.enrich_report_info(report_info)
 
     logging.info("Saving report info")
     logging.info(report_info)
@@ -63,6 +71,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         report_info["report_success"] = True
         report_info["report_success_reason"] = report_info.get("report_success_reason", [])
         report_info["report_success_reason"].append(report_info["violation_type"])
+        report_info["report_success_reason"] = list(set(report_info["report_success_reason"]))
 
     logging.info("Saving report")
     report_info_utils.save_report_info(report_info)
