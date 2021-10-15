@@ -5,9 +5,10 @@
 azure-functions
 azure-data-tables
 pycryptodome
-numpy
-hyperlpr
-torch
-torchvision
-opencv-contrib-python==3.4.15.55
-strsimpy
+python-dateutil
+#numpy
+#hyperlpr
+#torch
+#torchvision
+#opencv-contrib-python==3.4.15.55
+#strsimpy

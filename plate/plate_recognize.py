@@ -8,7 +8,7 @@ import cv2
 from hyperlpr import HyperLPR_plate_recognition
 from strsimpy.jaro_winkler import JaroWinkler
 
-from plate_detect import PlateDetect
+from .plate_detect import PlateDetect
 
 
 class PlateRecognize:
@@ -27,7 +27,7 @@ class PlateRecognize:
 
     def download(self):
         pathlib.Path(self.video_folder).mkdir(parents=True, exist_ok=True)
-        request.urlretrieve(url, self.video_file)
+        request.urlretrieve(self.video_url, self.video_file)
 
     def recognize(self):
         pathlib.Path(self.image_folder).mkdir(parents=True, exist_ok=True)
@@ -40,7 +40,7 @@ class PlateRecognize:
             if (count + 1) % (fps * 1) == 0:
                 x, y, _ = image.shape
                 image = image[0:int(x * 0.8), 0:y]
-                for i, loc in enumerate(detector.detect(count, image)):
+                for i, loc in enumerate(self.detector.detect(count, image)):
                     x0, y0, x1, y1 = (round(x) for x in loc)
                     xl, yl = abs(x1 - x0), abs(y1 - y0)
                     img_raw = image[max(0, y0 - yl):y1 + yl, max(0, x0 - xl):x1 + xl]

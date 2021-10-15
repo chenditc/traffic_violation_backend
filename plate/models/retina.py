@@ -4,10 +4,9 @@ import torchvision.models.detection.backbone_utils as backbone_utils
 import torchvision.models._utils as _utils
 import torch.nn.functional as F
 from collections import OrderedDict
-from models.net import MobileNetV1 as MobileNetV1
-from models.net import FPN as FPN
-from models.net import SSH as SSH
-
+from plate.models.net import MobileNetV1 as MobileNetV1
+from plate.models.net import FPN as FPN
+from plate.models.net import SSH as SSH
 
 class ClassHead(nn.Module):
 
