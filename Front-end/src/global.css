@@ -1,3 +1,7 @@
-.info {
-    color: #888;
+body {
+  background: linear-gradient(25deg, #28193d, #523957, #7f5c72, #ad828e);
+}
+
+#root {
+  overflow: auto;
 }
