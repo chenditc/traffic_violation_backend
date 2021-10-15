@@ -1,43 +1,54 @@
 import { useState, useCallback } from "react";
 import { IEvent } from "./event-list";
-import { request } from "umi";
-export default function ReportEditorModel () {
-  const [ reportInfo, setReportInfo ] = useState({} as IEvent);
+import { request, history } from "umi";
+import { Toast } from "antd-mobile";
+export default function ReportEditorModel() {
+  const [reportInfo, setReportInfo] = useState({} as IEvent);
+  const [submitting, setSubmitting] = useState(false);
   const setViolationType = useCallback(
     (type: string) => {
-      setReportInfo(info => ({
+      setReportInfo((info) => ({
         ...info,
-        violation_type: type
-      }))
+        violation_type: type,
+      }));
     },
     [setReportInfo],
   );
   const setPlateNumber = useCallback(
     (plateNumber: string) => {
-      setReportInfo(info => ({
+      setReportInfo((info) => ({
         ...info,
-        plate_num: plateNumber
-      }))
+        plate_num: plateNumber,
+      }));
     },
     [setReportInfo],
   );
-  const onSubmit = useCallback(
-    () => {
-      request("https://traffic-violation.azurewebsites.net/api/save_report_info", {
+  const onSubmit = useCallback(() => {
+    setSubmitting(true);
+    request(
+      "https://traffic-violation.azurewebsites.net/api/save_report_info",
+      {
         method: "post",
         body: JSON.stringify({
-          "user": reportInfo["tel"],
-          "report_json": JSON.stringify(reportInfo)
-        })
-      })
-    },
-    [reportInfo],
-  )
+          user: reportInfo["tel"],
+          report_json: JSON.stringify(reportInfo),
+        }),
+      },
+    ).then(() => {
+      setSubmitting(false);
+      Toast.show({
+        icon: "success",
+        content: "举报成功",
+      });
+      history.push("/list");
+    });
+  }, [reportInfo]);
   return {
     reportInfo,
     setReportInfo,
     setViolationType,
     setPlateNumber,
-    onSubmit
-  }
+    onSubmit,
+    submitting,
+  };
 }

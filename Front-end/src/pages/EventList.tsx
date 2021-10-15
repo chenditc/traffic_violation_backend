@@ -1,4 +1,4 @@
-import { Card, Space } from "antd-mobile";
+import { Card, Divider, Loading, Space } from "antd-mobile";
 import { useMemo, useEffect, useCallback } from "react";
 import { useModel, history } from "umi";
 import styles from "@/pages/index.less";
@@ -8,7 +8,7 @@ import {
   ExclamationCircleOutline,
 } from "antd-mobile-icons";
 export default function EventListPage() {
-  const { eventList, fetchList } = useModel("event-list");
+  const { eventList, fetchList, fetching } = useModel("event-list");
   useEffect(() => {
     fetchList("17602144419");
   }, []);
@@ -31,19 +31,32 @@ export default function EventListPage() {
           <div className={styles["card-footer"]}>
             <span className={styles["time-str"]}>{item.time_str}</span>
             <span>
-              {item.report_success ? (
-                <CheckCircleOutline />
-              ) : (
-                <ExclamationCircleOutline />
+              {item.report_success && (
+                <span className={styles["success-info"]}>
+                  <CheckCircleOutline />
+                  已举报
+                </span>
               )}
             </span>
-            {/* TODO footer部分的垂直居中对齐；icon的颜色区分，文字说明 */}
           </div>
         </Card>
       );
     });
   }, [eventList]);
-  return (
+  return fetching ? (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100%",
+      }}
+    >
+      <span style={{ fontSize: 24 }}>
+        <Loading color="white" />
+      </span>
+    </div>
+  ) : (
     <Space direction="vertical" className={styles["event-list"]}>
       {eventCardList}
     </Space>
