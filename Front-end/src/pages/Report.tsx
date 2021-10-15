@@ -1,6 +1,6 @@
 import { history, useModel } from "umi";
-import { useMemo, useCallback, useEffect } from "react";
-import { List, Input, Picker, Space, Button } from "antd-mobile";
+import { useMemo, useCallback, useEffect, useState } from "react";
+import { List, Input, Picker, Space, Button, Card, Divider } from "antd-mobile";
 import { IEvent } from "@/models/event-list";
 import styles from "@/pages/index.less";
 const Item = List.Item;
@@ -48,22 +48,41 @@ const violationPickerData = violationTypes.map((item) => ({
 }));
 export default function ReportPage() {
   const query = history.location.query;
-  if (!query) {
+  const { eventList } = useModel("event-list");
+  if (!query || eventList.length === 0) {
     history.push("/list");
   }
-  const { eventList } = useModel("event-list");
   const {
     reportInfo: editedInfo,
     setReportInfo,
     setViolationType,
     setPlateNumber,
     onSubmit,
+    submitting,
   } = useModel("report-editor");
   const reportInfo: IEvent | undefined = useMemo(() => {
     return eventList.find((item) => item.report_id === query!.id);
   }, [eventList, query]);
   useEffect(() => {
     setReportInfo(reportInfo as IEvent);
+  }, [reportInfo]);
+  const [isCustomPlate, setIsCustomPlate] = useState<boolean>(false);
+  const [platePickerVisible, setPlatePickerVisible] = useState<boolean>(false);
+  const [typePickerVisibile, setTypePickerVisibile] = useState<boolean>(false);
+
+  const plateNumberCandidates = useMemo(() => {
+    if (reportInfo?.plate_candidate_list) {
+      return [
+        reportInfo.plate_candidate_list
+          .map((item) => ({
+            label: item,
+            value: item,
+          }))
+          .concat({ label: "自定义车牌号", value: "custom" }),
+      ];
+    } else {
+      return [[]];
+    }
   }, [reportInfo]);
   const onViolationChange = useCallback(
     (val) => {
@@ -82,18 +101,91 @@ export default function ReportPage() {
   }, [onSubmit]);
   return (
     <div>
-      <List>
-        <img src={reportInfo?.video_info.cover.url} style={{ width: "100%" }} />
+      <List mode="card">
+        <div className={styles["basic-info"]}>
+          <span>基础信息</span>
+          <img
+            src={reportInfo?.video_info.cover.url}
+            style={{ width: "100%" }}
+          />
+        </div>
         <Item title="地点">{reportInfo?.loc_desp}</Item>
         <Item title="时间">{reportInfo?.time_str}</Item>
         <Item title="手机号">{reportInfo?.tel}</Item>
       </List>
-      {/* TODO 找个合适的selector组件，List样式 */}
-      {!reportInfo?.report_success && (
-        <Button onClick={onSubmit} className={styles["login-button"]}>
-          Report now!
-        </Button>
-      )}
+      <List mode="card">
+        <div className={styles["basic-info"]}>
+          <span>确认违章信息</span>
+        </div>
+        <Item title="车牌号" arrow>
+          <Picker
+            columns={plateNumberCandidates}
+            visible={platePickerVisible}
+            onClose={() => {
+              setPlatePickerVisible(false);
+            }}
+            value={[editedInfo.plate_num || ""]}
+            onConfirm={([val]) => {
+              if (val === "custom") {
+                setIsCustomPlate(true);
+              } else {
+                setIsCustomPlate(false);
+                onPlateNumberChange(val);
+              }
+            }}
+            key={"plate-num"}
+          />
+          <div
+            style={{ marginTop: "5px", width: "80%" }}
+            onClick={() => {
+              setPlatePickerVisible(true);
+            }}
+          >
+            {isCustomPlate
+              ? "自定义车牌号"
+              : editedInfo.plate_num
+              ? editedInfo.plate_num
+              : "请选择"}
+          </div>
+          {isCustomPlate && (
+            <>
+              <Divider style={{ margin: "5px 0" }} />
+              <Input
+                placeholder="Input the plate number"
+                value={editedInfo.plate_num}
+                onChange={onPlateNumberChange}
+              />
+            </>
+          )}
+        </Item>
+        <Item title="违章类型" arrow>
+          <Picker
+            columns={[violationPickerData]}
+            visible={typePickerVisibile}
+            onClose={() => {
+              setTypePickerVisibile(false);
+            }}
+            value={[editedInfo.violation_type || ""]}
+            onConfirm={onViolationChange}
+            key={"violation"}
+          />
+          <div
+            style={{ marginTop: "5px", width: "80%" }}
+            onClick={() => {
+              setTypePickerVisibile(true);
+            }}
+          >
+            {editedInfo.violation_type ? editedInfo.violation_type : "请选择"}
+          </div>
+        </Item>
+      </List>
+      <Button
+        onClick={onSubmit}
+        className={styles["login-button"]}
+        loading={submitting}
+      >
+        {!reportInfo?.report_success ? "Report it now!" : "Report again!"}
+      </Button>
     </div>
   );
 }

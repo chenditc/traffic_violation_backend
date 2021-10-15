@@ -42,6 +42,8 @@
   font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
   font-size: 20px !important;
   box-shadow: 5px 5px 5px -4px rgba(45, 41, 54, 0.356);
+  margin: 0 12px 12px 12px !important;
+  width: calc(100% - 24px);
 }
 
 .event-list {
@@ -73,11 +75,22 @@
   margin-top: 10px;
   display: inline-flex;
   justify-content: space-between;
+  align-items: center;
+}
+.success-info {
+  color: rgb(255, 255, 255);
 }
 .time-str {
   color: hsl(334, 11%, 29%);
   font-family: Georgia, "Times New Roman", Times, serif;
   font-size: 14px;
+}
+.basic-info {
+  padding: 10px;
+  span {
+    color: #888;
+    font-size: 16px;
+  }
 }
 .cover {
   width: 100%;

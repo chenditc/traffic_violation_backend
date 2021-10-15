@@ -23,11 +23,14 @@ export interface IEvent {
   plate_num?: string;
   violation_type?: string;
   report_success?: boolean;
+  plate_candidate_list?: string[];
 }
 
 export default function useEventListModel() {
   const [eventList, setEventList] = useState<IEvent[]>([]);
+  const [fetching, setFetching] = useState(false);
   const fetchList = useCallback((userId) => {
+    setFetching(true);
     request(
       "https://traffic-violation.azurewebsites.net/api/list_report_info",
       {
@@ -36,10 +39,12 @@ export default function useEventListModel() {
       },
     ).then((val) => {
       setEventList(val);
+      setFetching(false);
     });
   }, []);
   return {
     eventList,
     fetchList,
+    fetching,
   };
 }
