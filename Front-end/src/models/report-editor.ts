@@ -25,7 +25,10 @@ export default function ReportEditorModel () {
     () => {
       request("https://traffic-violation.azurewebsites.net/api/save_report_info", {
         method: "post",
-        params: reportInfo
+        body: JSON.stringify({
+          "user": reportInfo["tel"],
+          "report_json": JSON.stringify(reportInfo)
+        })
       })
     },
     [reportInfo],

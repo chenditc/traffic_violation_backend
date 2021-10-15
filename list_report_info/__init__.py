@@ -11,6 +11,10 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
     result = report_info_utils.list_report_info(user_id)
 
+    for report in result:
+        report["report_success"] = report.get("report_success", False)
+        report["plate_candidate_list"] = report.get("plate_candidate_list", [])
+
     return func.HttpResponse(
         json.dumps(result),
         mimetype="application/json"
