@@ -34,14 +34,23 @@ export default function ReportEditorModel() {
           report_json: JSON.stringify(reportInfo),
         }),
       },
-    ).then(() => {
-      setSubmitting(false);
-      Toast.show({
-        icon: "success",
-        content: "举报成功",
+    )
+      .then(() => {
+        setSubmitting(false);
+        Toast.show({
+          icon: "success",
+          content: "举报成功",
+        });
+        history.push("/list");
+      })
+      .catch((err) => {
+        setSubmitting(false);
+        Toast.show({
+          icon: "fail",
+          content: "举报信息有误",
+        });
+        return;
       });
-      history.push("/list");
-    });
   }, [reportInfo]);
   return {
     reportInfo,

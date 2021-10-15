@@ -24,6 +24,7 @@ export interface IEvent {
   violation_type?: string;
   report_success?: boolean;
   plate_candidate_list?: string[];
+  report_success_reason?: string[];
 }
 
 export default function useEventListModel() {
@@ -38,6 +39,7 @@ export default function useEventListModel() {
         params: { user: userId },
       },
     ).then((val) => {
+      console.log(val);
       setEventList(val);
       setFetching(false);
     });
