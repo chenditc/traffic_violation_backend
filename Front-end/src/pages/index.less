@@ -8,10 +8,77 @@
   align-items: center;
 }
 
-.phone-input {
+.phone-input-area {
   width: 300px;
+  background: hsla(0, 0%, 100%, 0.3);
+  height: 300px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  box-shadow: 0 0 6px rgba(180, 160, 120, 0.8);
+  padding: 0 20px;
+}
+.phone-input-area::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  filter: blur(10px);
+}
+.phone-input {
+  border-bottom: 1px solid #fff;
+  width: 200px !important;
+  --color: #fff !important;
 }
 
+.login-button {
+  --background-color: hsl(347, 57%, 56%) !important;
+  --border-width: 0 !important;
+  --border-style: none !important;
+  --text-color: #fff !important;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  font-size: 20px !important;
+  box-shadow: 5px 5px 5px -4px rgba(45, 41, 54, 0.356);
+}
+
+.event-list {
+  padding: 30px 15px;
+}
+.event-card {
+  background: hsla(0, 0%, 100%, 0.3) !important;
+  box-shadow: 0 0 6px rgba(61, 50, 63, 0.596);
+}
+.event-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  filter: blur(10px);
+}
+.event-card-title {
+  color: #fff;
+  :global(.adm-card-header-title) {
+    font-weight: lighter !important;
+    font-family: Helvetica, Tahoma, Arial, STXihei, "华文细黑", sans-serif;
+  }
+}
+.card-footer {
+  width: 100%;
+  margin-top: 10px;
+  display: inline-flex;
+  justify-content: space-between;
+}
+.time-str {
+  color: hsl(334, 11%, 29%);
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: 14px;
+}
 .cover {
   width: 100%;
 }

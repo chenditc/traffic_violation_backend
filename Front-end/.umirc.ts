@@ -12,4 +12,5 @@ export default defineConfig({
   ],
   fastRefresh: {},
   styles: ["#root {height: 100%}"],
+  antd: { mobile: false }
 });

@@ -1,15 +1,12 @@
-import styles from '@/pages/index.less';
-import {
-  useState,
-  useCallback,
-} from "react"
-import { WhiteSpace, InputItem, Button } from 'antd-mobile';
-import { history } from 'umi';
+import styles from "@/pages/index.less";
+import { useState, useCallback } from "react";
+import { Space, Input, Button, List } from "antd-mobile";
+import { history } from "umi";
 const fullHeight = {
-  height: '100%',
+  height: "100%",
 };
 export default function LoginPage() {
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState("");
   const onPhoneNumberChange = useCallback(
     (value) => {
       setPhoneNumber(value);
@@ -19,23 +16,29 @@ export default function LoginPage() {
   const onLogin = useCallback(() => {
     // TODO verify login info
     if (true) {
-      history.push('/list');
+      history.push("/list");
     }
   }, []);
   // TODO validate phone number
   return (
-    <div className={styles['center-layout']} style={fullHeight}>
-      <div className={styles['phone-input']}>
-      <InputItem
-        type="phone"
-        clear={true}
-        value={phoneNumber}
-        onChange={onPhoneNumberChange}
-        placeholder="Input phone number"
-      />
-      <WhiteSpace />
-      <Button onClick={onLogin}>Login with phone number</Button>
-      </div>
+    <div className={styles["center-layout"]} style={fullHeight}>
+      <Space direction="vertical" className={styles["phone-input-area"]}>
+        <Input
+          type="phone"
+          clearable={true}
+          value={phoneNumber}
+          onChange={onPhoneNumberChange}
+          placeholder="Input phone number"
+          className={styles["phone-input"]}
+        />
+        <Button
+          onClick={onLogin}
+          className={styles["login-button"]}
+          size="large"
+        >
+          Login
+        </Button>
+      </Space>
     </div>
   );
 }
