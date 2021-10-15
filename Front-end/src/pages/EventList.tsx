@@ -26,6 +26,7 @@ export default function EventListPage() {
           title={item.loc_desp}
           className={styles["event-card"]}
           headerClassName={styles["event-card-title"]}
+          key={item.report_id}
         >
           <img src={item.video_info.cover.url} className={styles.cover} />
           <div className={styles["card-footer"]}>
