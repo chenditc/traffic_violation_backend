@@ -30,6 +30,8 @@ def list_report_info(user):
     for report in report_list:
         try:
             report_info = json.loads(report["report_json"])
+            if "plate_json" in report:
+                report_info["plate_candidate_list"] = [ plate_info[0] for plate_info in json.loads(report["plate_json"])[:5] ]
             result.append(report_info)
         except Exception as e:
             print(e)
