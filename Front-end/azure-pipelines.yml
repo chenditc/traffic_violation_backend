@@ -25,11 +25,13 @@ steps:
     cd Front-end
     npm install
     npm run build
-    ls Front-end
+    ls
   displayName: 'npm install and build'
 - script: |
-    ls Front-end
-  displayName: 'ls info'
+    cd Front-end
+    npm run build
+    ls
+  displayName: 'npm run build'
 - task: AzureFileCopy@4
   inputs:
     SourcePath: 'Front-end/dist/*'
