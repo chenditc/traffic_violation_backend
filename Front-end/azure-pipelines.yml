@@ -20,6 +20,9 @@ steps:
     npm install
     npm run build
   displayName: 'npm install and build'
+- script: |
+    ls
+  displayName: 'ls info'
 - task: AzureFileCopy@4
   inputs:
     SourcePath: 'Front-end/dist/*'
