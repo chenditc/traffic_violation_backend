@@ -85,8 +85,10 @@ if __name__ == '__main__':
 
     detector = PlateDetect()
     table_service: TableService = TableService(connection_string=connection_string)
+    print("Start loading report info")
     for entity in table_service.query_entities("TrafficReportInfo", filter="plate_processed ne true"):
         report_json = json.loads(entity['report_json'])
+        print(f"Start processing {report_json}")
         if report_json.get("video_info", {}).get("video", {}).get("url"):
             url = report_json["video_info"]["video"]["url"]
             print("URL:", url)
@@ -98,3 +100,4 @@ if __name__ == '__main__':
         entity['report_json'] = json.dumps(report_json)
         entity['plate_processed'] = True
         table_service.insert_or_replace_entity("TrafficReportInfo", entity)
+    print("Finished processing all report info")
