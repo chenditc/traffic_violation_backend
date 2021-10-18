@@ -10,10 +10,13 @@ USER_REQUEST_TABLE = "UserRequestInfo"
 
 
 def save_report_info(report_info):    
+    report_info["plate_processed"] = report_info.get("plate_processed", "false")
+    
     report_entity = {
         'PartitionKey': str(report_info["user_id"]), 
         'RowKey': report_info["report_id"],
-        "report_json": json.dumps(report_info)
+        "report_json": json.dumps(report_info),
+        "plate_processed" : report_info["plate_processed"]
     }
     table_client = table_service_client.get_table_client(table_name=TRAFFIC_INFO_TABLE)
     table_client.upsert_entity(entity=report_entity)
