@@ -1,6 +1,8 @@
+import json
 import os.path
 import pathlib
 import re
+import sys
 from collections import defaultdict
 from urllib import request
 
@@ -8,7 +10,8 @@ import cv2
 from hyperlpr import HyperLPR_plate_recognition
 from strsimpy.jaro_winkler import JaroWinkler
 
-from .plate_detect import PlateDetect
+from plate_detect import PlateDetect
+from azure.cosmosdb.table.tableservice import TableService
 
 
 class PlateRecognize:
@@ -18,9 +21,9 @@ class PlateRecognize:
         self.video_url = video_url
         work_folder = pathlib.Path().resolve()
         video_name = video_url.split('/')[-1]
-        self.video_folder = os.path.join(work_folder, "../video")
+        self.video_folder = os.path.join(work_folder, "/video")
         self.video_file = os.path.join(self.video_folder, video_name)
-        self.image_folder = os.path.join(work_folder, "../image", video_name.split('.')[0])
+        self.image_folder = os.path.join(work_folder, "/image", video_name.split('.')[0])
         self.re = re.compile(
             "([京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领]{1}[A-Z]{1}(([A-HJ-NP-Z0-9]{5}[DF]{1})|([DF]{1}[A-HJ-NP-Z0-9]{5})))|([京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领]{1}[A-Z]{1}[A-HJ-NP-Z0-9]{4}[A-HJ-NP-Z0-9挂学警港澳]{1})")
         self.jarowinkler = JaroWinkler()
@@ -74,11 +77,24 @@ class PlateRecognize:
 
 
 if __name__ == '__main__':
-    # url = "http://1300035106.vod2.myqcloud.com/83d79a75vodcq1300035106/20f956b53701925925895653755/J1i9LoTbjVsA.mp4"
-    url = "http://1300035106.vod2.myqcloud.com/83d79a75vodcq1300035106/b325a1963701925925849484647/CambOYFKvikA.mp4"
+
+    connection_string = os.getenv("TABLE_CONNECTION")
+    if not connection_string.strip():
+        print("env TABLE_CONNECTION must exist")
+        sys.exit(1)
 
     detector = PlateDetect()
-    recognizer = PlateRecognize(url, detector)
-    recognizer.download()
-    plates = recognizer.recognize()
-    print(plates)
+    table_service: TableService = TableService(connection_string=connection_string)
+    for entity in table_service.query_entities("TrafficReportInfo", filter="plate_processed ne true"):
+        report_json = json.loads(entity['report_json'])
+        if report_json.get("video_info", {}).get("video", {}).get("url"):
+            url = report_json["video_info"]["video"]["url"]
+            print("URL:", url)
+            recognizer = PlateRecognize(url, detector)
+            recognizer.download()
+            plates = recognizer.recognize()
+            print("PLATE:", plates)
+            entity['plate_json'] = json.dumps(plates, ensure_ascii=False)
+        entity['report_json'] = json.dumps(report_json)
+        entity['plate_processed'] = True
+        table_service.insert_or_replace_entity("TrafficReportInfo", entity)
