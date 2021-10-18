@@ -25,6 +25,7 @@ steps:
     cd Front-end
     npm install
     npm run build
+    ls Front-end
   displayName: 'npm install and build'
 - script: |
     ls Front-end
