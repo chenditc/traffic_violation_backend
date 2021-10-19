@@ -4,6 +4,7 @@ import json
 import azure.functions as func
 import uuid
 from storage_utils import report_info_utils
+from report_utils import enrich_report_info
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     user_id = req.params.get("user");
@@ -30,6 +31,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     report_info["report_id"] = report_id
     report_info["tel"] = user_id
     report_info["user_id"] = user_id
+    
+    enrich_report_info.enrich_report_info(report_info)
 
     report_info_utils.save_report_info(report_info)
 
