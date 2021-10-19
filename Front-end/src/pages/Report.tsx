@@ -113,10 +113,12 @@ export default function ReportPage() {
       <List mode="card">
         <div className={styles["basic-info"]}>
           <span>基础信息</span>
-          <img
-            src={reportInfo?.video_info.cover.url}
-            style={{ width: "100%" }}
-          />
+          <a href={reportInfo?.video_info.cover.url} target="_blank">
+            <img
+              src={reportInfo?.video_info.cover.url}
+              style={{ width: "100%" }}
+            />
+          </a>
         </div>
         <Item title="视频地址"><a href={reportInfo?.video_info.video.url} target="_blank">点击播放</a></Item>
         <Item title="地点">{reportInfo?.loc_desp}</Item>
