@@ -1,5 +1,6 @@
 import json
 import os.path
+import os
 import pathlib
 import re
 import sys
@@ -31,6 +32,10 @@ class PlateRecognize:
     def download(self):
         pathlib.Path(self.video_folder).mkdir(parents=True, exist_ok=True)
         request.urlretrieve(self.video_url, self.video_file)
+        
+    def clean_up(self):
+        if os.path.exists(self.video_file):
+            os.remove(self.video_file)
 
     def recognize(self):
         pathlib.Path(self.image_folder).mkdir(parents=True, exist_ok=True)
