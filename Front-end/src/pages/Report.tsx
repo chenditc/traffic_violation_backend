@@ -121,7 +121,7 @@ export default function ReportPage() {
           </a>
         </div>
         <Item title="视频地址"><a href={reportInfo?.video_info.video.url} target="_blank">点击播放</a></Item>
-        <Item title="地点">{reportInfo?.loc_response.GaoDeMiaoShu}</Item>
+        <Item title="地点"><a href=https://uri.amap.com/marker?position={reportInfo?.gcj_lng},{reportInfo?.gcj_lat} target="_blank">{reportInfo?.loc_response.GaoDeMiaoShu}</a></Item>
         <Item title="时间">{reportInfo?.time_str}</Item>
         <Item title="手机号">{reportInfo?.tel}</Item>
       </List>
