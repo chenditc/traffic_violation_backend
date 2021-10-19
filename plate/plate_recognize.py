@@ -94,7 +94,10 @@ if __name__ == '__main__':
             print("URL:", url)
             recognizer = PlateRecognize(url, detector)
             recognizer.download()
-            plates = recognizer.recognize()
+            try:
+                plates = recognizer.recognize()
+            except Exception as e:
+                print(f"Failed to recognize plate for {url} and exception {e}")
             print("PLATE:", plates)
             entity['plate_json'] = json.dumps(plates, ensure_ascii=False)
         entity['report_json'] = json.dumps(report_json)
