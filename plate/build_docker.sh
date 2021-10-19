@@ -1,0 +1,1 @@
+docker build . -t plate:0.1

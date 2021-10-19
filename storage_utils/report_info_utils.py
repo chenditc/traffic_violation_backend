@@ -10,10 +10,13 @@ USER_REQUEST_TABLE = "UserRequestInfo"
 
 
 def save_report_info(report_info):    
+    report_info["plate_processed"] = report_info.get("plate_processed", "false")
+    
     report_entity = {
         'PartitionKey': str(report_info["user_id"]), 
         'RowKey': report_info["report_id"],
-        "report_json": json.dumps(report_info)
+        "report_json": json.dumps(report_info),
+        "plate_processed" : report_info["plate_processed"]
     }
     table_client = table_service_client.get_table_client(table_name=TRAFFIC_INFO_TABLE)
     table_client.upsert_entity(entity=report_entity)
@@ -27,6 +30,8 @@ def list_report_info(user):
     for report in report_list:
         try:
             report_info = json.loads(report["report_json"])
+            if "plate_json" in report:
+                report_info["plate_candidate_list"] = [ plate_info[0] for plate_info in json.loads(report["plate_json"])[:5] ]
             result.append(report_info)
         except Exception as e:
             print(e)

@@ -2,8 +2,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.autograd import Variable
-from plate.utils.box_utils import match, log_sum_exp
-from plate.data import cfg_mnet
+from utils.box_utils import match, log_sum_exp
+from data import cfg_mnet
 GPU = cfg_mnet['gpu_train']
 
 class MultiBoxLoss(nn.Module):
