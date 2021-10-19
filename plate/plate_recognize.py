@@ -65,6 +65,8 @@ class PlateRecognize:
         group = {x: {x} for x in plate_dict.keys()}
         for k0 in plate_dict.keys():
             score = [(self.jarowinkler.similarity(k0, k1), k1) for k1 in plate_dict.keys() if k0 != k1]
+            if len(score) == 0:
+                continue
             first = sorted(score, reverse=True)[0]
             if first[0] > 0.95:
                 group[k0] = group[k0].union(group[first[1]])
