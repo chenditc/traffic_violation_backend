@@ -69,6 +69,9 @@ def convert_time_str(epoch_time):
     local_time = utc_time.replace(tzinfo=from_zone).astimezone(to_zone)
     return local_time.strftime("%Y-%m-%d %H:%M:%S")
 
+def convert_time_no_timezone(epoch_time):
+    return datetime.datetime.utcfromtimestamp(epoch_time).strftime("%Y-%m-%d %H:%M:%S")
+
 def get_report_location_from_lat_lon(lat, lon):
         new_lng, new_lat = wgs84_to_gcj02(lon, lat)
         headers = {
@@ -83,5 +86,5 @@ def get_report_location_from_lat_lon(lat, lon):
 def enrich_report_info(report_info):
         report_info["gcj_lng"], report_info["gcj_lat"] = wgs84_to_gcj02(report_info["lon"], report_info["lat"])
         report_info["loc_response"] = get_report_location_from_lat_lon(report_info["gcj_lat"], report_info["gcj_lng"])
-        report_info["time_str"] = convert_time_str(report_info["time"])
+        report_info["time_str"] = convert_time_no_timezone(report_info["time"])
         return report_info
