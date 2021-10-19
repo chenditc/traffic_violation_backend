@@ -10,7 +10,7 @@ USER_REQUEST_TABLE = "UserRequestInfo"
 
 
 def save_report_info(report_info):    
-    report_info["plate_processed"] = report_info.get("plate_processed", "false")
+    report_info["plate_processed"] = report_info.get("plate_processed", False)
     
     report_entity = {
         'PartitionKey': str(report_info["user_id"]), 
