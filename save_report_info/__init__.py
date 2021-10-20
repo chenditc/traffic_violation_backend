@@ -54,7 +54,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     if report_info["violation_type"] == "" or len(report_info["violation_type"]) < 2:
         return func.HttpResponse("Invalid violation type", status_code=400)
     if report_success_key in report_info.get("report_success_reason", []):
-        return func.HttpResponse("Already report this type", status_code=400)
+        return func.HttpResponse(f"Already report {report_success_key}", status_code=400)
 
     enrich_report_info.enrich_report_info(report_info)
 
