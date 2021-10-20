@@ -87,7 +87,7 @@ def get_report_location_from_lat_lon(lat, lon):
         except Exception as e:
             print("Failed to get gps info")
             if i == (max_retry - 1):
-                throw e
+                raise e
     return loc_response
 
 def enrich_report_info(report_info):
