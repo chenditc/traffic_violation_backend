@@ -16,6 +16,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     for report in result:
         report["report_success"] = report.get("report_success", False)
         report["plate_candidate_list"] = report.get("plate_candidate_list", [])
+        if report.get("plate_num", "") == "" and len(report["plate_candidate_list"]) > 0:
+            report["plate_num"] = report["plate_candidate_list"][0]
     
     if refresh_info:
         for report in result:
