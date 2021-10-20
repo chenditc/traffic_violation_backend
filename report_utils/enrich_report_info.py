@@ -81,7 +81,7 @@ def get_report_location_from_lat_lon(lat, lon):
     max_retry = 5
     for i in range(max_retry):
         try:
-            loc_response = requests.get(url, headers=headers)
+            loc_response = requests.get(url, headers=headers, timeout=5)
             loc_response = loc_response.json()
         except Exception as e:
             print("Failed to get gps info")
