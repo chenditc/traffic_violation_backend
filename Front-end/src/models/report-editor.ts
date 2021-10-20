@@ -45,9 +45,10 @@ export default function ReportEditorModel() {
       })
       .catch((err) => {
         setSubmitting(false);
+        console.log(err)
         Toast.show({
           icon: "fail",
-          content: "举报信息有误",
+          content: err.data,
         });
         return;
       });
