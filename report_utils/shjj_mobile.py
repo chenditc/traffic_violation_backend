@@ -2,6 +2,7 @@ import requests
 import json
 from report_utils import des3
 import datetime
+import os
 
 headers = {
     'Host': 'sh.122.gov.cn',
@@ -88,12 +89,14 @@ def report_video(report_info, user_login_info, key, salt):
       "gps" : "{},{}".format(report_info["gcj_lng"], report_info["gcj_lat"])
     }
     print(data)
-    #url = "http://sh.122.gov.cn/shjjappapi/service/videoUp"
-    #result = send_request(url, data, key, salt)
-    #result_json = remove_json_pad(result)
-    #print(result_json)
-    #return json.loads(result_json)
-    return {"code":"0","msg":"1634200926953","ydsj":"2021-10-14 16:42"}
+    if os.environ.get("REAL_REPORT"):
+      url = "http://sh.122.gov.cn/shjjappapi/service/videoUp"
+      result = send_request(url, data, key, salt)
+      result_json = remove_json_pad(result)
+      print(result_json)
+      return json.loads(result_json)
+    else:
+      return {"code":"0","msg":"1634200926953","ydsj":"2021-10-14 16:42"}
 
 def get_user_encypt_key(user):
     result = get_poi_ios(user)
