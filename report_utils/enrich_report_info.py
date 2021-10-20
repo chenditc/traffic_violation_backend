@@ -80,7 +80,7 @@ def get_report_location_from_lat_lon(lat, lon):
     url = f"http://sh.122.gov.cn/position/Service/GetLocation.ashx?x={new_lng}&y={new_lat}&date={time.time()}"
     print(url)
     max_retry = 5
-    for i in in range(max_retry):
+    for i in range(max_retry):
         try:
             loc_response = requests.get(url, headers=headers)
             loc_response = loc_response.json()
