@@ -30,10 +30,10 @@ def archive_report_info(user, report_time):
     table_client = table_service_client.get_table_client(table_name=TRAFFIC_INFO_TABLE)
     table_client.update_entity(entity=report_entity)
 
-def list_report_info(user):
+def list_report_info(user, min_time=0):
     table_client = table_service_client.get_table_client(table_name=TRAFFIC_INFO_TABLE)
     report_list = table_client.query_entities(
-        query_filter="PartitionKey eq '" + user + "',archived ne true")
+        query_filter="PartitionKey eq '" + user + "' and archived ne true")
     
     result = []
     for report in report_list:
