@@ -45,7 +45,6 @@ export default function ReportEditorModel() {
       })
       .catch((err) => {
         setSubmitting(false);
-        console.log(err.data)
         Toast.show({
           icon: "fail",
           content: err.data,

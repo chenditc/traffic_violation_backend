@@ -73,21 +73,20 @@ def convert_time_no_timezone(epoch_time):
     return datetime.datetime.utcfromtimestamp(epoch_time).strftime("%Y-%m-%d %H:%M:%S")
 
 def get_report_location_from_lat_lon(lat, lon):
-    new_lng, new_lat = wgs84_to_gcj02(lon, lat)
     headers = {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36',
     }
-    url = f"http://sh.122.gov.cn/position/Service/GetLocation.ashx?x={new_lng}&y={new_lat}&date={time.time()}"
+    url = f"http://sh.122.gov.cn/position/Service/GetLocation.ashx?x={lon}&y={lat}&date={time.time()}"
     print(url)
     max_retry = 5
-    for i in in range(max_retry):
+    for i in range(max_retry):
         try:
-            loc_response = requests.get(url, headers=headers)
+            loc_response = requests.get(url, headers=headers, timeout=5)
             loc_response = loc_response.json()
         except Exception as e:
             print("Failed to get gps info")
             if i == (max_retry - 1):
-                throw e
+                raise e
     return loc_response
 
 def enrich_report_info(report_info):

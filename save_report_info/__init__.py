@@ -20,6 +20,9 @@ def get_plate_color(plate_num):
             return "0"
     return "2"
 
+def get_report_success_key(report_info):
+    return "{}:{}".format(report_info.get("plate_num"), report_info.get("violation_type"))
+
 def main(req: func.HttpRequest) -> func.HttpResponse:
     user_id = req.params.get("user");
     report_json = req.params.get("report_json");
@@ -44,15 +47,17 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     report_info["violation_type"] = report_info.get("violation_type", "")
     report_info["plate_num"] = report_info.get("plate_num", "")
     report_info["plate_color"] = get_plate_color(report_info["plate_num"])
+    report_success_key = get_report_success_key(report_info)
 
     if report_info["plate_num"] == "" or len(report_info["plate_num"]) < 7:
         return func.HttpResponse("Invalid plate number", status_code=400)
     if report_info["violation_type"] == "" or len(report_info["violation_type"]) < 2:
         return func.HttpResponse("Invalid violation type", status_code=400)
-    if report_info["violation_type"] in report_info.get("report_success_reason", []):
-        return func.HttpResponse("Already report this type", status_code=400)
+    if report_success_key in report_info.get("report_success_reason", []):
+        return func.HttpResponse(f"Already report {report_success_key}", status_code=400)
 
-    enrich_report_info.enrich_report_info(report_info)
+    if "gcj_lng" not in report_info:
+        enrich_report_info.enrich_report_info(report_info)
 
     logging.info("Saving report info")
     logging.info(report_info)
@@ -70,7 +75,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     if report_result["code"] == "0":
         report_info["report_success"] = True
         report_info["report_success_reason"] = report_info.get("report_success_reason", [])
-        report_info["report_success_reason"].append(report_info["violation_type"])
+        report_info["report_success_reason"].append(report_success_key)
         report_info["report_success_reason"] = list(set(report_info["report_success_reason"]))
 
     logging.info("Saving report")
