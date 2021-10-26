@@ -16,7 +16,8 @@ def save_report_info(report_info):
         'PartitionKey': str(report_info["user_id"]), 
         'RowKey': report_info["report_id"],
         "report_json": json.dumps(report_info),
-        "plate_processed" : report_info["plate_processed"]
+        "plate_processed" : report_info["plate_processed"],
+        "archived" : False
     }
     table_client = table_service_client.get_table_client(table_name=TRAFFIC_INFO_TABLE)
     table_client.upsert_entity(entity=report_entity)
