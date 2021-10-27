@@ -82,5 +82,5 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         report_info_utils.save_report_info(report_info)
     else:
         report_info["report_failed_reason"] = json.dumps(report_result)
-        func.HttpResponse(json.dumps(report_result))
+        return func.HttpResponse(json.dumps(report_result), status_code=400)
     return func.HttpResponse(f"ok.")
