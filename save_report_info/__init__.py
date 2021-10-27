@@ -72,13 +72,15 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info("Submitting report")
     report_result = shjj_mobile.report_video(report_info, user_login_info=user_login_info, key=user_key, salt=user_salt)
 
+
     if report_result["code"] == "0":
         report_info["report_success"] = True
         report_info["report_success_reason"] = report_info.get("report_success_reason", [])
         report_info["report_success_reason"].append(report_success_key)
         report_info["report_success_reason"] = list(set(report_info["report_success_reason"]))
-
-    logging.info("Saving report")
-    report_info_utils.save_report_info(report_info)
-
+        logging.info("Saving report")
+        report_info_utils.save_report_info(report_info)
+    else:
+        report_info["report_failed_reason"] = json.dumos(report_result)
+        func.HttpResponse(json.dumos(report_result))
     return func.HttpResponse(f"ok.")
