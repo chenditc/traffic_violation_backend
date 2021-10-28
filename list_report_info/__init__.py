@@ -1,6 +1,7 @@
 import logging
 import json
 import os
+import time
 import azure.functions as func
 from storage_utils import report_info_utils
 from report_utils import enrich_report_info
@@ -13,6 +14,11 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
     result = report_info_utils.list_report_info(user_id)
 
+    if len(result) > 0:
+        last_week = time.time() - 3600 * 24 * 7
+        result = sorted(result, key=lambda x: x["time"], reverse=True)
+        result = [x for x in result if x["time"] > last_week]
+    
     for report in result:
         report["report_success"] = report.get("report_success", False)
         report["plate_candidate_list"] = report.get("plate_candidate_list", [])
