@@ -60,6 +60,7 @@ export default function ReportPage() {
     setViolationType,
     setPlateNumber,
     onSubmit,
+    onArchive,
     submitting,
   } = useModel("report-editor");
   const reportInfo: IEvent | undefined = eventList.find(
@@ -184,6 +185,13 @@ export default function ReportPage() {
       >
         {!reportInfo?.report_success ? "提交举报!" : "再举报!"}
       </Button>
+      <Button
+        onClick={onArchive}
+        className={styles["login-button"]}
+        loading={submitting}
+      >
+       {"归档"}
+      </Button> 
     </div>
   );
 }

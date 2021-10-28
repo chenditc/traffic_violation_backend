@@ -52,12 +52,43 @@ export default function ReportEditorModel() {
         return;
       });
   }, [reportInfo]);
+  const onArchive = useCallback(() => {
+    setSubmitting(true);
+    request(
+      "https://traffic-violation.azurewebsites.net/api/archive_report_info",
+      {
+        method: "post",
+        body: JSON.stringify({
+          user: reportInfo["tel"],
+          time: reportInfo["time"],
+        }),
+      },
+    )
+      .then(() => {
+        setSubmitting(false);
+        Toast.show({
+          icon: "success",
+          content: "归档成功",
+        });
+        history.push("/list");
+      })
+      .catch((err) => {
+        setSubmitting(false);
+        Toast.show({
+          icon: "fail",
+          content: err.data,
+        });
+        return;
+      });
+  }, [reportInfo]);
+
   return {
     reportInfo,
     setReportInfo,
     setViolationType,
     setPlateNumber,
     onSubmit,
+    onArchive,
     submitting,
   };
 }
