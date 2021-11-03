@@ -74,9 +74,14 @@ def convert_time_no_timezone(epoch_time):
 
 def get_report_location_from_lat_lon(lat, lon):
     headers = {
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36',
+        'Connection': 'keep-alive',
+        'Cache-Control': 'max-age=0',
+        'Upgrade-Insecure-Requests': '1',
+        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/94.0.4606.81',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+        'Accept-Language': 'en-US,en;q=0.9,zh-CN;q=0.8,zh-TW;q=0.7,zh;q=0.6',
     }
-    url = f"http://sh.122.gov.cn/position/Service/GetLocation.ashx?x={lon}&y={lat}&date={time.time()}"
+    url = f"http://sh.122.gov.cn/position/Service/GetLocation.ashx?x={lon}&y={lat}"
     print(url)
     max_retry = 5
     for i in range(max_retry):
