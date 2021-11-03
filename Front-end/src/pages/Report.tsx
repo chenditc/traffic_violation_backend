@@ -100,7 +100,7 @@ export default function ReportPage() {
   );
 
 
-  const [plateValue, setPlateValue] = useState(editedInfo.plate_num);
+  const [plateValue, setPlateValue] = useState(reportInfo?.plate_num);
   const onPlateNumberChange = useCallback(
     (val) => {
       console.log("1111", val);
