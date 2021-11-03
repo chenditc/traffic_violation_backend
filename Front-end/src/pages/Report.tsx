@@ -142,7 +142,6 @@ export default function ReportPage() {
         <Item title="车牌号">
           <AutoComplete
             options={plateNumberCandidates}
-            value={editedInfo.plate_num}
             onSelect={onPlateNumberChange}
             style={{ width: "100%" }}
           >
@@ -153,7 +152,7 @@ export default function ReportPage() {
               onChange={(ev) => {
                 onPlateNumberChange(ev.target.value);
               }}
-              value={editedInfo.plate_num}
+              defaultValue={editedInfo.plate_num}
             />
           </AutoComplete>
         </Item>
