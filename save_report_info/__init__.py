@@ -49,7 +49,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     report_info["plate_color"] = get_plate_color(report_info["plate_num"])
     report_success_key = get_report_success_key(report_info)
 
-    if report_info["plate_num"] == "" or len(report_info["plate_num"]) < 7:
+    if report_info["plate_num"] == "" or len(report_info["plate_num"]) < 7 or len(report_info["plate_num"]) > 8:
         return func.HttpResponse("Invalid plate number", status_code=400)
     if report_info["violation_type"] == "" or len(report_info["violation_type"]) < 2:
         return func.HttpResponse("Invalid violation type", status_code=400)
