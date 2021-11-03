@@ -98,6 +98,9 @@ export default function ReportPage() {
     },
     [setViolationType],
   );
+
+
+  const [plateValue, setPlateValue] = useState(editedInfo.plate_num);
   const onPlateNumberChange = useCallback(
     (val) => {
       console.log("1111", val);
@@ -105,6 +108,8 @@ export default function ReportPage() {
     },
     [setPlateNumber],
   );
+
+
   // TODO need validation?
   // const onClickSubmit = useCallback(() => {
   //   onSubmit();
@@ -143,18 +148,15 @@ export default function ReportPage() {
           <AutoComplete
             options={plateNumberCandidates}
             onSelect={onPlateNumberChange}
-            defaultValue={editedInfo.plate_num}
             style={{ width: "100%" }}
+            value={plateValue}
+            className={styles["plate-input"]}
+            onChange={(data) => {
+              onPlateNumberChange(data);
+            }}
+            placeholder="请输入"          
+            size="large"
           >
-            <AntdInput
-              size="large"
-              placeholder="请输入"
-              className={styles["plate-input"]}
-              onChange={(ev) => {
-                onPlateNumberChange(ev.target.value);
-              }}
-              defaultValue={editedInfo.plate_num}
-            />
           </AutoComplete>
         </Item>
         <Item title="违章类型" arrow>
