@@ -143,6 +143,7 @@ export default function ReportPage() {
           <AutoComplete
             options={plateNumberCandidates}
             onSelect={onPlateNumberChange}
+            defaultValue={editedInfo.plate_num}
             style={{ width: "100%" }}
           >
             <AntdInput
