@@ -105,6 +105,8 @@ export default function ReportPage() {
     (val) => {
       console.log("1111", val);
       setPlateNumber(val);
+      setPlateValue(val);
+      console.log(reportInfo);
     },
     [setPlateNumber],
   );
