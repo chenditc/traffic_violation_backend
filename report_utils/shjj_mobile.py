@@ -9,7 +9,7 @@ headers = {
     'Content-Type': 'application/x-www-form-urlencoded',
     'Connection': 'close',
     'Accept': '*/*',
-    'User-Agent': 'shang hai jiao jing/4.5.1 (iPhone; iOS 14.8; Scale/3.00)',
+    'User-Agent': 'shang hai jiao jing/4.9.0 (iPhone; iOS 14.8; Scale/3.00)',
     'Accept-Language': 'zh-Hans-CN;q=1, en-CN;q=0.9, zh-Hant-CN;q=0.8, ko-CN;q=0.7',
     'Content-Length': '472',
     'Accept-Encoding': 'gzip, deflate',
@@ -56,7 +56,7 @@ def login(user, password, key, salt):
       "password" : password,
       "phoneType" : "ios",
       "qqsj" : get_curr_time(),
-      "bbh" : "4.6.3"
+      "bbh" : "4.9.0"
     }
     url = "http://sh.122.gov.cn/shjjappapi/service/login"
     result = send_request(url, data, key, salt)
