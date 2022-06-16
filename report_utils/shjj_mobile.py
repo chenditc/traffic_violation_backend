@@ -4,12 +4,14 @@ from report_utils import des3
 import datetime
 import os
 
+SHJJ_VERSION="4.6.3"
+
 headers = {
     'Host': 'sh.122.gov.cn',
     'Content-Type': 'application/x-www-form-urlencoded',
     'Connection': 'close',
     'Accept': '*/*',
-    'User-Agent': 'shang hai jiao jing/4.9.0 (iPhone; iOS 14.8; Scale/3.00)',
+    'User-Agent': 'shang hai jiao jing/' + SHJJ_VERSION + ' (iPhone; iOS 14.8; Scale/3.00)',
     'Accept-Language': 'zh-Hans-CN;q=1, en-CN;q=0.9, zh-Hant-CN;q=0.8, ko-CN;q=0.7',
     'Content-Length': '472',
     'Accept-Encoding': 'gzip, deflate',
@@ -56,7 +58,7 @@ def login(user, password, key, salt):
       "password" : password,
       "phoneType" : "ios",
       "qqsj" : get_curr_time(),
-      "bbh" : "4.9.0"
+      "bbh" : SHJJ_VERSION
     }
     url = "http://sh.122.gov.cn/shjjappapi/service/login"
     result = send_request(url, data, key, salt)
