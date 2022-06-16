@@ -56,7 +56,7 @@ def login(user, password, key, salt):
       "password" : password,
       "phoneType" : "ios",
       "qqsj" : get_curr_time(),
-      "bbh" : "4.6.0"
+      "bbh" : "4.6.3"
     }
     url = "http://sh.122.gov.cn/shjjappapi/service/login"
     result = send_request(url, data, key, salt)
