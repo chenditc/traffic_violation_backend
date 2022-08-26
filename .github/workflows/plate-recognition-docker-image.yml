@@ -28,5 +28,6 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          file: plate/Dockerfile
+          context: "{{defaultContext}}:plate"
+          file: Dockerfile
           tags: chenditc/plate_recognition:latest
