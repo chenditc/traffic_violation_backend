@@ -4,7 +4,7 @@ from report_utils import des3
 import datetime
 import os
 
-SHJJ_VERSION="4.6.3"
+SHJJ_VERSION="4.6.5"
 
 headers = {
     'Host': 'sh.122.gov.cn',
