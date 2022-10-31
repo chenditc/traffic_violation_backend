@@ -81,12 +81,17 @@ def get_report_location_from_lat_lon(lat, lon):
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
         'Accept-Language': 'en-US,en;q=0.9,zh-CN;q=0.8,zh-TW;q=0.7,zh;q=0.6',
     }
+    proxy_url = os.environ.get("MAINLAND_PROXY")
+    proxies = {
+        'http': f"http://{proxy_url}",
+        'https': f"https://{proxy_url}"
+    }
     url = f"http://sh.122.gov.cn/position/Service/GetLocation.ashx?x={lon}&y={lat}"
     print(url)
     max_retry = 5
     for i in range(max_retry):
         try:
-            loc_response = requests.get(url, headers=headers, timeout=5)
+            loc_response = requests.get(url, headers=headers, , proxies=proxies, timeout=5)
             loc_response = loc_response.json()
         except Exception as e:
             print("Failed to get gps info")
