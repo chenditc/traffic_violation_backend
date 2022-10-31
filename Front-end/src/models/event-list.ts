@@ -33,7 +33,7 @@ export default function useEventListModel() {
   const fetchList = useCallback((userId) => {
     setFetching(true);
     request(
-      "https://traffic-violation.azurewebsites.net/api/list_report_info",
+      "http://ss.chendi.me:10000/api/list_report_info",
       {
         method: "get",
         params: { user: userId },
