@@ -17,9 +17,15 @@ headers = {
     'Accept-Encoding': 'gzip, deflate',
 }
 
+proxy_url = os.environ.get("MAINLAND_PROXY")
+proxies = {
+  'http': f"http://{proxy_url}",
+  'https': f"https://{proxy_url}"
+}
+
 def send_request(url, data, key=None, salt=None):
 	  data_str = des3.encrypt_message(json.dumps(data), key, salt)
-	  response = requests.post(url, headers=headers, data=data_str, verify=False)
+	  response = requests.post(url, headers=headers, proxies=proxies, data=data_str, verify=False)
 	  if response.status_code != 200:
 		    print(f"request failed: {response.content}")
 		    return
